@@ -1,0 +1,123 @@
+{
+  "cases": [
+    {
+      "case": "A Claude-only file",
+      "result": "CORRECT"
+    },
+    {
+      "case": "B Codex-only file and nonzero patch lines",
+      "result": "CORRECT"
+    },
+    {
+      "case": "C sequential agents, different retained lines",
+      "result": "CORRECT"
+    },
+    {
+      "case": "D sequential agents, different retained lines",
+      "result": "CORRECT"
+    },
+    {
+      "case": "E separate lines, separate requests in one file",
+      "result": "CORRECT"
+    },
+    {
+      "case": "surviving local block remains attributable after another request changes distant lines",
+      "result": "CORRECT"
+    },
+    {
+      "case": "F identical line candidates from two agents never use latest wins",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "G human-equivalent novel addition and later identical rewrite",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "H rename source has no fabricated line attribution",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "I explicit successful delete",
+      "result": "CORRECT"
+    },
+    {
+      "case": "delete followed by recreation cannot explain a later unlogged deletion",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "J new file including punctuation",
+      "result": "CORRECT"
+    },
+    {
+      "case": "K binary file is never line-attributed",
+      "result": "UNTRACEABLE"
+    },
+    {
+      "case": "L larger than 4 MiB is explicitly omitted",
+      "result": "UNTRACEABLE"
+    },
+    {
+      "case": "M mixed CRLF and LF exact lines",
+      "result": "CORRECT"
+    },
+    {
+      "case": "N subagent fork cannot steal parent request timeline",
+      "result": "CORRECT"
+    },
+    {
+      "case": "O resumed session uses the later request",
+      "result": "CORRECT"
+    },
+    {
+      "case": "continuation is kept with the existing request, not a new intent",
+      "result": "CORRECT"
+    },
+    {
+      "case": "time skew/autosave delay -10000ms is not ownership",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "time skew/autosave delay 1200ms is not ownership",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "time skew/autosave delay 10000ms is not ownership",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "time skew/autosave delay 60000ms is not ownership",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "overlapping background commands never own unmatched content",
+      "result": "UNTRACEABLE"
+    },
+    {
+      "case": "failed and pending patch calls remain unresolved",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "whitespace difference is not normalized into attribution",
+      "result": "UNTRACEABLE"
+    },
+    {
+      "case": "same-byte rewrite inside tool interval is observationally indistinguishable, never HIGH",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "future-dated clock cannot establish a current edit",
+      "result": "AMBIGUOUS"
+    },
+    {
+      "case": "Claude sidechain keeps its request separate and resumes the parent",
+      "result": "CORRECT"
+    }
+  ],
+  "counts": {
+    "CORRECT": 13,
+    "AMBIGUOUS": 11,
+    "UNTRACEABLE": 4
+  },
+  "interpretation": "Cases classified for evidence strength. The identical-rewrite ambiguity case can still show MEDIUM in the product, never HIGH."
+}
+

@@ -1,0 +1,203 @@
+{
+  "verdict": "PASS",
+  "classification": "WIPWHO_BUG",
+  "git": "2.51.0.windows.1",
+  "node": "24.15.0",
+  "rootCauses": [
+    "Source selection forced core.autocrlf=false instead of honoring source Git configuration.",
+    "Raw HEAD LF blobs were combined with normalized diff coordinates and CRLF working bytes; checkout representation was missing."
+  ],
+  "tests": {
+    "passed": 51,
+    "failed": 0,
+    "skipped": 0,
+    "newRegressionCases": 6
+  },
+  "matrix": [
+    {
+      "case": "A",
+      "trackedFiles": 21,
+      "autocrlf": false,
+      "coreEol": "native",
+      "attributes": null,
+      "status": " M index.js\n",
+      "numstat": "1\t1\tindex.js\n",
+      "cleanTargetCountBefore": 0,
+      "cleanTargetCountAfter": 0,
+      "targetsBefore": 1,
+      "targetsAfter": 1,
+      "splitBefore": "PASS",
+      "splitAfter": "PASS",
+      "hashes": [
+        {
+          "file": "index.js",
+          "before": "493a6af97ac314457d3f8aa64a4519918c43d7028ea00434176121e73e489193",
+          "headBlob": "493a6af97ac314457d3f8aa64a4519918c43d7028ea00434176121e73e489193",
+          "beforeTransform": "NONE",
+          "expected": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "actual": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "match": true
+        }
+      ],
+      "independentHashes": [
+        {
+          "file": "index.js",
+          "expected": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "actual": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "match": true
+        }
+      ]
+    },
+    {
+      "case": "B",
+      "trackedFiles": 21,
+      "autocrlf": true,
+      "coreEol": "native",
+      "attributes": null,
+      "status": " M index.js\n",
+      "numstat": "1\t1\tindex.js\n",
+      "cleanTargetCountBefore": 21,
+      "cleanTargetCountAfter": 0,
+      "targetsBefore": 21,
+      "targetsAfter": 1,
+      "splitBefore": "PASS",
+      "splitAfter": "PASS",
+      "hashes": [
+        {
+          "file": "index.js",
+          "before": "3b184078322b3530d83f43a48f1aecf6a689f5091fec196425f17ca8f82b8078",
+          "headBlob": "493a6af97ac314457d3f8aa64a4519918c43d7028ea00434176121e73e489193",
+          "beforeTransform": "CRLF",
+          "expected": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "actual": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "match": true
+        }
+      ],
+      "independentHashes": [
+        {
+          "file": "index.js",
+          "expected": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "actual": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "match": true
+        }
+      ]
+    },
+    {
+      "case": "C",
+      "trackedFiles": 21,
+      "autocrlf": true,
+      "coreEol": "native",
+      "attributes": "lf",
+      "status": " M index.js\n?? .gitattributes\n",
+      "numstat": "1\t1\tindex.js\n",
+      "cleanTargetCountBefore": 1,
+      "cleanTargetCountAfter": 1,
+      "targetsBefore": 2,
+      "targetsAfter": 2,
+      "splitBefore": "PASS",
+      "splitAfter": "PASS",
+      "hashes": [
+        {
+          "file": "index.js",
+          "before": "493a6af97ac314457d3f8aa64a4519918c43d7028ea00434176121e73e489193",
+          "headBlob": "493a6af97ac314457d3f8aa64a4519918c43d7028ea00434176121e73e489193",
+          "beforeTransform": "NONE",
+          "expected": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "actual": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "match": true
+        },
+        {
+          "file": ".gitattributes",
+          "before": null,
+          "beforeTransform": "NONE",
+          "expected": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9",
+          "actual": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9",
+          "match": true
+        }
+      ],
+      "independentHashes": [
+        {
+          "file": "index.js",
+          "expected": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "actual": "ead530e0f15024d898b1491502f02c82a981efb3c8ea8fc7e123ee3c3702ea5e",
+          "match": true
+        },
+        {
+          "file": ".gitattributes",
+          "expected": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9",
+          "actual": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9",
+          "match": true
+        }
+      ]
+    },
+    {
+      "case": "D",
+      "trackedFiles": 21,
+      "autocrlf": false,
+      "coreEol": "native",
+      "attributes": "crlf",
+      "status": " M index.js\n?? .gitattributes\n",
+      "numstat": "1\t1\tindex.js\n",
+      "cleanTargetCountBefore": 1,
+      "cleanTargetCountAfter": 1,
+      "targetsBefore": 2,
+      "targetsAfter": 2,
+      "splitBefore": "FAIL",
+      "splitAfter": "PASS",
+      "hashes": [
+        {
+          "file": "index.js",
+          "before": "3b184078322b3530d83f43a48f1aecf6a689f5091fec196425f17ca8f82b8078",
+          "headBlob": "493a6af97ac314457d3f8aa64a4519918c43d7028ea00434176121e73e489193",
+          "beforeTransform": "CRLF",
+          "expected": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "actual": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "match": true
+        },
+        {
+          "file": ".gitattributes",
+          "before": null,
+          "beforeTransform": "NONE",
+          "expected": "09f30948eaeb0fb1f7bf9a4db544ad665f645d2667541ba12252edd929c5ea96",
+          "actual": "09f30948eaeb0fb1f7bf9a4db544ad665f645d2667541ba12252edd929c5ea96",
+          "match": true
+        }
+      ],
+      "independentHashes": [
+        {
+          "file": "index.js",
+          "expected": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "actual": "e45398741b3b50ad463a4b6179c5b0fefac767a9ffa030a510af4d0e7c51f1a2",
+          "match": true
+        },
+        {
+          "file": ".gitattributes",
+          "expected": "09f30948eaeb0fb1f7bf9a4db544ad665f645d2667541ba12252edd929c5ea96",
+          "actual": "09f30948eaeb0fb1f7bf9a4db544ad665f645d2667541ba12252edd929c5ea96",
+          "match": true
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "C/D include an intentionally untracked .gitattributes in addition to the one modified tracked file.",
+    "Saved initial comparison had 7 dirty files and 150 wipwho targets. Current saved fixture has an additional deleted gitlink: 8 Git changes, 151 targets before fix, 8 after fix.",
+    "Current saved fixture: strict split correctly rejects the actual unsupported gitlink. Explicit text-only export: 3 patches, 7/7 final hashes; independent verifier agrees.",
+    "Export base is HEAD with the manifest EOL transform and preimage hash, not universally raw HEAD bytes.",
+    "Public MIT Git bundle reused an existing commit; no staging or new commits were performed."
+  ],
+  "portableExit127": {
+    "separateIssue": true,
+    "observed": "WSL reports the referenced Node and ai-blame executable paths do not exist.",
+    "windowsArtifactsPresent": [
+      false,
+      false
+    ],
+    "deeperMountCause": "NOT_INVESTIGATED"
+  },
+  "limitations": [
+    "Custom filter, ident and working-tree-encoding checkout transforms are rejected.",
+    "Unchanged files and EOL-only differences ignored by Git are outside the selected dirty set.",
+    "No generalized claim for arbitrary mixed-EOL rewrites or all Git filters."
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "version": "0.1.0",
+  "verdict": "INTERNAL_READY",
+  "capturedAt": "2026-09-15T09:23:15.657Z",
+  "scope": "Windows local internal use; not a public release or an authorship guarantee",
+  "sourceSafety": {
+    "headUnchanged": true,
+    "indexUnchanged": true,
+    "originalTrackedDirtyFilesUnchanged": 8,
+    "nonWipwhoSupportedFilesUnchangedAtFinalCheck": 49,
+    "sourceStageCommitResetRestoreDeletePushExecuted": false
+  },
+  "tests": {
+    "command": "npm test",
+    "total": 45,
+    "passed": 45,
+    "failed": 0,
+    "skipped": 0,
+    "lastRun": "2026-09-15T09:22:14Z"
+  },
+  "attribution": {
+    "fixtureCases": 28,
+    "realLogSamples": 7,
+    "total": 35,
+    "counts": {
+      "CORRECT": 18,
+      "AMBIGUOUS": 12,
+      "WRONG": 0,
+      "UNTRACEABLE": 5
+    },
+    "interpretation": "CORRECT checks the raw content/tool/request link; this is not a causal oracle for an unobserved identical human rewrite.",
+    "falseAttribution": "No incorrect observed content/tool/request link in audited samples. Same-byte human rewrite during tool interval remains indistinguishable and may display MEDIUM; causal false attribution is not ruled out."
+  },
+  "split": {
+    "dirtyFiles": 67,
+    "patches": 11,
+    "applySuccess": 11,
+    "applyFail": 0,
+    "finalHashes": 65,
+    "matchingHashes": 65,
+    "omittedLinesWithinIncludedFiles": 0,
+    "extraLinesWithinIncludedFiles": 0,
+    "omittedUnsupportedFiles": [
+      {
+        "file": "prototypes/gitlab-migration-reconciliation-20260915/tests/generated-scale-fixtures/destination-50000.json",
+        "reason": "LARGE_FILE"
+      },
+      {
+        "file": "prototypes/gitlab-migration-reconciliation-20260915/tests/generated-scale-fixtures/source-50000.json",
+        "reason": "LARGE_FILE"
+      }
+    ],
+    "unsupportedLineCounts": "UNKNOWN; not included in the zero omitted-lines figure",
+    "independentVerifier": "New local shared clone populated from HEAD blobs; git apply --check and apply, then exact-byte SHA-256 and file-set comparison",
+    "baseHead": "bd43315e71b68165d8f6923046ba318693c4e3d3",
+    "snapshotNote": "Final source/docs before addition of these evidence records. Evidence records themselves were not part of this snapshot."
+  },
+  "performance": {
+    "before": {
+      "elapsedMs": 5354,
+      "dirtyFiles": 54
+    },
+    "after": {
+      "runs": [
+        {
+          "label": "cached-1",
+          "files": 67,
+          "groups": 12,
+          "profile": {
+            "gitMs": 733,
+            "logsMs": 2203,
+            "attributionMs": 343,
+            "logs": 202,
+            "bytes": 705221387,
+            "cacheHits": 201,
+            "cacheMisses": 1,
+            "cacheCorrupt": 0,
+            "malformed": 0,
+            "sourceMoved": 0,
+            "hashMs": 1800.2815999999953,
+            "parseMs": 29.121900000000096,
+            "elapsedMs": 2202.663,
+            "totalMs": 3367
+          }
+        },
+        {
+          "label": "cached-2",
+          "files": 67,
+          "groups": 12,
+          "profile": {
+            "gitMs": 726,
+            "logsMs": 2217,
+            "attributionMs": 358,
+            "logs": 202,
+            "bytes": 705221387,
+            "cacheHits": 202,
+            "cacheMisses": 0,
+            "cacheCorrupt": 0,
+            "malformed": 0,
+            "sourceMoved": 0,
+            "hashMs": 1831.853599999998,
+            "parseMs": 0,
+            "elapsedMs": 2216.6401,
+            "totalMs": 3373
+          }
+        },
+        {
+          "label": "no-cache",
+          "files": 67,
+          "groups": 12,
+          "profile": {
+            "gitMs": 657,
+            "logsMs": 5292,
+            "attributionMs": 356,
+            "logs": 202,
+            "bytes": 705227216,
+            "cacheHits": 0,
+            "cacheMisses": 202,
+            "cacheCorrupt": 0,
+            "malformed": 0,
+            "sourceMoved": 0,
+            "hashMs": 1826.1172999999985,
+            "parseMs": 3367.1424000000015,
+            "elapsedMs": 5291.5906,
+            "totalMs": 6379
+          }
+        }
+      ],
+      "cacheEquivalent": true,
+      "signature": "ae6d5d5acbe716414da70d0be2f8660788c9199e98abb7cc74f93842a10f0ad7"
+    },
+    "comparisonWarning": "Before and after are different dirty/log snapshots, not a controlled speed ratio.",
+    "measuredWarmTargetMs": 3500
+  },
+  "privacy": {
+    "normalExit": 0,
+    "whyExit": 0,
+    "whyLines": 1,
+    "absoluteWindowsPath": false,
+    "username": false,
+    "rawPromptField": false,
+    "knownTokenPattern": false,
+    "normalStderrBytes": 0,
+    "whyStderrBytes": 0,
+    "strictSplitExit": 3,
+    "strictSplitMessage": "wipwho: UNSAFE_TO_SPLIT: unsupported files present; --text-only explicitly excludes them",
+    "strictOutputCreated": false,
+    "networkCalls": false,
+    "rawConversationCopies": false,
+    "cache": "Derived metadata and hashes outside repository; source content digest and parser identity invalidation; optional.",
+    "retention": "Cache, exports and temporary verification copies are retained, unencrypted; no automated cleanup."
+  },
+  "regressions": {
+    "codexZeroLines": "PASS",
+    "execConstPatch": "PASS",
+    "subagentParentTimeline": "PASS",
+    "headingOnlyLabel": "PASS",
+    "regexEscapes": "PASS",
+    "independentSelfValidation": "PASS",
+    "CRLFWarningFlood": "PASS; normal/why stderr 0 bytes",
+    "meaninglessMixedFileWarning": "PASS; independent edits split, incompatible replacements stop"
+  },
+  "limits": [
+    "No HIGH confidence or guarantee of final writer",
+    "Only supported static edit formats; no dynamic or conditional patch execution inference",
+    "Exact HEAD and sequential patch order; shifted-base apply success is not final-hash proof",
+    "Binary, >4 MiB, special modes/links omitted only with explicit --text-only",
+    "Unmerged index and staged-delete/untracked-name overlaps unsupported; guards not exercised with staged live data",
+    "Private local cache and temporary copy retention not managed"
+  ],
+  "humanInterventionCount": 0
+}

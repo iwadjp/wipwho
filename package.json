@@ -1,0 +1,2 @@
+{"name":"wipwho","version":"0.1.0","private":true,"description":"Split mixed, uncommitted changes into per-request review patches using local Claude Code / Codex transcripts, with unresolved lines kept explicit.","license":"SEE LICENSE IN LICENSE","scripts":{"test":"node --test test/*.test.cjs"},"engines":{"node":">=22"}}
+
