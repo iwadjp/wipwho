@@ -275,3 +275,18 @@ Prototype, internal-use quality. Published at
 fixed during development, and remaining scope. No tagged release, no issue
 triage process, and no npm package yet — treat it as a working prototype, not
 a maintained product.
+
+## Related tools
+
+This project is part of a small set of tools for investigating AI-coding and
+debugging problems that Git alone cannot explain.
+
+- [Timewitness](https://github.com/iwadjp/timewitness) — check whether a regression test fails before a fix and passes after it.
+- [wipwho](https://github.com/iwadjp/wipwho) — split mixed uncommitted Claude/Codex changes into request-level patches.
+- [Ember](https://github.com/iwadjp/ember) — recover source retained by a still-running Node.js process.
+- [Worldbisect](https://github.com/iwadjp/worldbisect) — reduce same-commit environment differences to an observed 1-minimal reproducing set.
+- [Afterimage](https://github.com/iwadjp/afterimage) — inspect retained NTFS USN history after an agent run.
+
+[Overview and articles](https://blog2020.iwadjp.com/2026/09/18/ai-coding-debugging-tools-portfolio/)
+
+**Article:** [Claude CodeとCodexの変更が混ざった。未commitのdirty treeを依頼ごとに分けるwipwho](https://blog2020.iwadjp.com/2026/09/17/wipwho-split-mixed-dirty-tree-by-request/)
