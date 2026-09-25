@@ -272,9 +272,9 @@ output on disk for inspection instead of deleting them afterward.
 Prototype, internal-use quality. Published at
 [github.com/iwadjp/wipwho](https://github.com/iwadjp/wipwho). See
 `invention-report.md` for the full validation history, known bugs found and
-fixed during development, and remaining scope. No tagged release, no issue
-triage process, and no npm package yet — treat it as a working prototype, not
-a maintained product.
+fixed during development, and remaining scope. Public v0.1.0 is a source-only
+tagged release; there is no issue triage process and no npm package yet — treat
+it as a working prototype, not a maintained product.
 
 ## Related tools
 
