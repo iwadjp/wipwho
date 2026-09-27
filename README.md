@@ -34,6 +34,23 @@ clearly support one request, it says so explicitly instead of guessing — see
 Windows / Git / Node.js 22+ (checked against Node 24.15, Git 2.51). No
 dependencies, no install step.
 
+Try the demo first. It builds a throwaway fixture and never reads your real
+`~/.claude` or `~/.codex` (see [Demo](#demo)):
+
+```powershell
+npx -p github:iwadjp/wipwho wipwho-demo
+```
+
+Then run it in any Git repository, without cloning:
+
+```powershell
+npx github:iwadjp/wipwho
+npx github:iwadjp/wipwho why src/app.js:42
+npx github:iwadjp/wipwho split --out <new-directory>
+```
+
+Or run it from a clone:
+
 ```powershell
 git clone https://github.com/iwadjp/wipwho.git
 cd wipwho
@@ -245,6 +262,8 @@ memory of either tool's docs alone.
 ```
 node demo/run-demo.cjs
 ```
+
+Without a clone: `npx -p github:iwadjp/wipwho wipwho-demo`.
 
 Builds a disposable Git repository and a disposable fake `HOME`
 (`.claude/projects/…`, `.codex/sessions/…`) in a temp directory, points the
