@@ -1,0 +1,24 @@
+'use strict';
+const {test}=require('node:test'),a=require('node:assert/strict');
+const fs=require('node:fs'),path=require('node:path'),cp=require('node:child_process');
+const {temp}=require('./helpers.cjs');
+const g=(repo,...args)=>cp.execFileSync('git',['-C',repo,'-c','core.autocrlf=false',...args],{encoding:'utf8',windowsHide:true});
+test('text report marks an index/worktree overlap instead of showing a bare +0 -0',()=>{
+  const repo=temp(),home=temp(),w=(rel,s)=>fs.writeFileSync(path.join(repo,rel),s);
+  g(repo,'init','-q');g(repo,'config','user.email','a@b');g(repo,'config','user.name','a');
+  for(const f of['overlap file.txt','staged.txt','unstaged.txt','both.txt'])w(f,'one\n');
+  g(repo,'add','.');g(repo,'commit','-qm','base');
+  g(repo,'rm','-q','--cached','overlap file.txt');
+  w('staged.txt','one\nstaged\n');g(repo,'add','staged.txt');
+  w('unstaged.txt','one\nunstaged\n');
+  w('both.txt','one\nstaged\n');g(repo,'add','both.txt');w('both.txt','one\nstaged\nunstaged\n');
+  w('new file.txt','new\n');
+  const out=cp.execFileSync(process.execPath,[path.join(__dirname,'..','wipwho.cjs'),'--repo',repo],{encoding:'utf8',windowsHide:true,env:{...process.env,HOME:home,USERPROFILE:home}});
+  const row=name=>out.split('\n').find(l=>l.trim().startsWith(name));
+  a.equal(row('overlap file.txt').trim(),'overlap file.txt  +0 -0  [INDEX_WORKTREE_OVERLAP]');
+  a.equal(row('staged.txt').trim(),'staged.txt:2  +1 -0');
+  a.equal(row('unstaged.txt').trim(),'unstaged.txt:2  +1 -0');
+  a.equal(row('both.txt').trim(),'both.txt:2-3  +2 -0');
+  a.equal(row('new file.txt').trim(),'new file.txt:1  +1 -0');
+  a.equal((out.match(/\[INDEX_WORKTREE_OVERLAP\]/g)||[]).length,1);
+});

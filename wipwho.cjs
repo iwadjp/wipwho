@@ -88,10 +88,12 @@ async function main(argv=process.argv.slice(2)){
     if(opt.json)console.log(JSON.stringify({version:'0.1.0',files:snapshot.files.size,groups,warnings:['Conversation-level estimates, not recorded authorship. Identical rewrites inside a tool interval cannot be distinguished.']},null,2));
     else{
       console.log('wipwho v0.1 · '+snapshot.files.size+' dirty files · estimated provenance');
+      // A staged deletion recreated as untracked has no diff lines; without a marker it reads as a harmless +0 -0.
+      const overlap=new Set([...snapshot.files.values()].filter(f=>f.omitted==='INDEX_WORKTREE_OVERLAP').map(f=>displayPath(f.rel)));
       for(const group of groups){
         console.log('\n'+group.title+' ['+group.confidence+']'+(group.agent?' · '+group.agent+' · '+group.id:''));
         if(group.requestAt)console.log('  requested '+group.requestAt+' · session '+group.session);
-        for(const f of group.files.slice(0,opt.all?undefined:12))console.log('  '+f.file+(f.lines.length?':'+range(f.lines):'')+'  +'+f.add+' -'+f.del);
+        for(const f of group.files.slice(0,opt.all?undefined:12))console.log('  '+f.file+(f.lines.length?':'+range(f.lines):'')+'  +'+f.add+' -'+f.del+(overlap.has(f.file)?'  [INDEX_WORKTREE_OVERLAP]':''));
         if(!opt.all&&group.files.length>12)console.log('  … '+(group.files.length-12)+' more files (--all)');
         if(group.resume)console.log('  '+group.resume);
       }
