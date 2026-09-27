@@ -87,7 +87,8 @@ function readDirty(repo) {
     const combined=git(repo,['diff',head,'--no-ext-diff','--no-textconv','--no-renames','--no-color','-U0','--',...tracked.map(f=>f.rel)],{sourceConfig:true});
     for(const block of combined.split(/(?=^diff --git )/m).filter(Boolean)){
       const header=block.split('\n').find(l=>l.startsWith('+++ '));if(!header)continue;
-      let name=header.slice(4);if(name.startsWith('"'))name=JSON.parse(name);name=name.replace(/^b\//,'');
+      // Git ends ---/+++ paths containing a space with a TAB; it is not part of the name.
+      let name=header.slice(4).replace(/\t$/,'');if(name.startsWith('"'))name=JSON.parse(name);name=name.replace(/^b\//,'');
       const f=files.get(name);if(!f)throw Error('DIFF_PATH_MISMATCH');
       if(/^old mode |^new mode /m.test(block)){f.omitted='UNSUPPORTED_MODE_CHANGE';continue;}
       f.hunks=hunksFromDiff(block,f.beforeLines,f.afterLines);

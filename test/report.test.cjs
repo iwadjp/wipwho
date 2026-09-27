@@ -22,3 +22,26 @@ test('text report marks an index/worktree overlap instead of showing a bare +0 -
   a.equal(row('new file.txt').trim(),'new file.txt:1  +1 -0');
   a.equal((out.match(/\[INDEX_WORKTREE_OVERLAP\]/g)||[]).length,1);
 });
+test('tracked paths with spaces do not fail the report (Git appends a TAB to ---/+++ paths)',()=>{
+  const repo=temp(),home=temp(),w=(rel,s)=>fs.writeFileSync(path.join(repo,rel),s);
+  g(repo,'init','-q');g(repo,'config','user.email','a@b');g(repo,'config','user.name','a');
+  for(const f of['mod ified.txt','sta ged.txt','bo th.txt','old name.txt','gone file.txt','plain.txt'])w(f,'one\n');
+  g(repo,'add','.');g(repo,'commit','-qm','base');
+  w('mod ified.txt','one\nedit\n');
+  w('sta ged.txt','one\nstaged\n');g(repo,'add','sta ged.txt');
+  w('bo th.txt','one\nstaged\n');g(repo,'add','bo th.txt');w('bo th.txt','one\nstaged\nunstaged\n');
+  g(repo,'mv','old name.txt','new name.txt');
+  g(repo,'rm','-q','gone file.txt');
+  w('un tracked.txt','new\n');w('plain.txt','one\nplain\n');
+  const out=cp.execFileSync(process.execPath,[path.join(__dirname,'..','wipwho.cjs'),'--repo',repo],{encoding:'utf8',windowsHide:true,env:{...process.env,HOME:home,USERPROFILE:home}});
+  const row=name=>(out.split('\n').find(l=>l.trim().startsWith(name+':')||l.trim().startsWith(name+' '))||'').trim();
+  a.match(out,/8 dirty files/);
+  a.equal(row('mod ified.txt'),'mod ified.txt:2  +1 -0');
+  a.equal(row('sta ged.txt'),'sta ged.txt:2  +1 -0');
+  a.equal(row('bo th.txt'),'bo th.txt:2-3  +2 -0');
+  a.equal(row('new name.txt'),'new name.txt:1  +1 -0');
+  a.equal(row('old name.txt'),'old name.txt  +0 -1');
+  a.equal(row('gone file.txt'),'gone file.txt  +0 -1');
+  a.equal(row('un tracked.txt'),'un tracked.txt:1  +1 -0');
+  a.equal(row('plain.txt'),'plain.txt:2  +1 -0');
+});
