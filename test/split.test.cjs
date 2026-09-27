@@ -41,7 +41,10 @@ test('quoted and regex-special filenames survive patch path translation',()=>{
 });
 test('unsupported files stop default split; explicit text-only reports omissions',()=>{
   const x=scenario([makeFile('a.bin',null,Buffer.from([0,1])),makeFile('big.txt',null,'x'.repeat(4*1024*1024+1)),makeFile('small.txt',null,'small text body\n')],[]);
-  a.throws(()=>run(x),/UNSAFE_TO_SPLIT: unsupported/);const {plan}=run(x,{textOnly:true});a.equal(plan.omitted.length,2);a.equal(plan.hashes.length,1);a.equal(plan.scope,'TEXT_ONLY');
+  a.throws(()=>run(x),/UNSAFE_TO_SPLIT: unsupported/);
+  // The refusal must name what blocked it, so the user can fix those files or choose --text-only knowingly.
+  a.throws(()=>run(x),/a\.bin: BINARY_OR_NON_UTF8/);a.throws(()=>run(x),/big\.txt: LARGE_FILE/);
+  const {plan}=run(x,{textOnly:true});a.equal(plan.omitted.length,2);a.equal(plan.hashes.length,1);a.equal(plan.scope,'TEXT_ONLY');
 });
 test('independent final-byte oracle detects reconstruction drift, does not publish unsafe patches',()=>{
   const x=scenario([makeFile('a.txt',null,'original desired bytes\r\n')],[]);

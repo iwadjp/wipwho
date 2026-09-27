@@ -55,7 +55,10 @@ function split(snapshot,analysis,out,options={}) {
   if(inside(snapshot.repo,fs.realpathSync(ancestor))||!noLinks(path.parse(out).root,ancestor))throw Error('UNSAFE_TO_SPLIT: output parent is a link or inside the repository');
   if(fs.existsSync(out))throw Error('UNSAFE_TO_SPLIT: choose a new output directory; existing output is never overwritten');
   const omitted=[...snapshot.files.values()].filter(f=>f.omitted).map(f=>({file:displayPath(f.rel),reason:f.omitted}));
-  if(omitted.length&&!options.textOnly)throw Error('UNSAFE_TO_SPLIT: unsupported files present; --text-only explicitly excludes them');
+  if(omitted.length&&!options.textOnly){
+    const named=omitted.slice(0,5).map(o=>o.file+': '+o.reason).join(', ')+(omitted.length>5?`, and ${omitted.length-5} more`:'');
+    throw Error(`UNSAFE_TO_SPLIT: unsupported files present (${named}); --text-only explicitly excludes them`);
+  }
   const selected=[...snapshot.files.values()].filter(f=>!f.omitted);
   for(const f of selected)for(const h of f.hunks){
     if(h.lines.some(l=>l.t==='-')&&new Set(h.records.map(owner)).size>1)throw Error(`UNSAFE_TO_SPLIT: mixed ownership inside replacement/deletion hunk (${displayPath(f.rel)})`);
