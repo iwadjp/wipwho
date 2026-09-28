@@ -4,6 +4,9 @@ const fs=require('node:fs'),path=require('node:path');
 const {T,temp,makeFile,codex,claude,scenario}=require('./helpers.cjs');
 const {split}=require('../split.cjs');
 const {git,hash}=require('../common.cjs');
+const {readDirty}=require('../working.cjs');
+const {analyze}=require('../attribution.cjs');
+const cp=require('node:child_process');
 function run(x,options={}){const out=path.join(temp(),'out');const plan=split(x.snapshot,x.analysis,out,{checkSource:false,...options});return{plan,out};}
 test('new mixed-intent file: applies per request with no omitted/extra changed lines',()=>{
   const first='const firstFeature = true;',second='const secondFeature = true;';
@@ -65,3 +68,47 @@ test('offset experiment: application alone is not proof on a different base',()=
   a.notEqual(hash(fs.readFileSync(path.join(shifted,'a.txt'))),plan.hashes[0].expected);
   a.ok(plan.limitations[0].includes('different base hashes are unsupported'));
 });
+
+function modeFixture(rel,body,executable){
+  const repo=temp();git(repo,['init','--quiet']);git(repo,['config','core.filemode','false']);
+  fs.writeFileSync(path.join(repo,rel),body);fs.writeFileSync(path.join(repo,'notes.txt'),'base\n');
+  git(repo,['add','.']);git(repo,['update-index','--chmod='+(executable?'+x':'-x'),'--',rel]);
+  git(repo,['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','-c','commit.gpgsign=false','commit','-qm','base']);
+  git(repo,['update-index','--chmod='+(executable?'-x':'+x'),'--',rel]);
+  return repo;
+}
+function gitState(repo){
+  return {
+    head:git(repo,['rev-parse','HEAD']),index:git(repo,['ls-files','--stage','-z']),
+    indexHash:hash(fs.readFileSync(path.join(repo,'.git','index'))),
+    status:git(repo,['status','--porcelain=v1','-z']),
+    staged:git(repo,['diff','--cached','--raw','--no-renames']),unstaged:git(repo,['diff','--raw','--no-renames']),
+    worktree:fs.readdirSync(repo).filter(n=>n!=='.git').sort().map(n=>({path:n,hash:hash(fs.readFileSync(path.join(repo,n))),mode:fs.statSync(path.join(repo,n)).mode})),
+  };
+}
+for(const [rel,body,executable,mixed]of [['実行 script.sh','#!/bin/sh\necho hello\n',false,true],['empty mode.txt','',true,false]]){
+  test(`mode-only ${executable?'-x':'+x'} change is refused without publishing or modifying source (${rel})`,()=>{
+    const repo=modeFixture(rel,body,executable),out=path.join(temp(),'out'),home=temp();
+    if(mixed)fs.appendFileSync(path.join(repo,'notes.txt'),'unstaged edit\n');
+    const before=gitState(repo);
+    a.match(before.staged,/100644 100755|100755 100644/);
+    // Mode-only patches have no +++ path header. The old parser skipped the
+    // mode guard and claimed success based only on equal content hashes.
+    a.doesNotMatch(git(repo,['diff','HEAD','--',rel]),/^\+\+\+ /m);
+    const result=cp.spawnSync(process.execPath,[path.join(__dirname,'..','wipwho.cjs'),'--repo',repo,'split','--out',out,'--no-cache'],{
+      encoding:'utf8',windowsHide:true,env:{...process.env,HOME:home,USERPROFILE:home},
+    });
+    a.deepEqual(gitState(repo),before);
+    a.equal(result.status,3,result.stdout+result.stderr);
+    a.match(result.stderr,/UNSAFE_TO_SPLIT:.*UNSUPPORTED_MODE_CHANGE/);
+    a.ok(result.stderr.includes(rel));a.equal(fs.existsSync(out),false);
+    const snapshot=readDirty(repo),analysis=analyze(snapshot,{sessions:new Map(),edits:[],commands:[]});
+    a.equal(snapshot.files.get(rel).omitted,'UNSUPPORTED_MODE_CHANGE');
+    // Explicit text-only export may skip it, but must disclose the omission.
+    const plan=split(snapshot,analysis,out,{textOnly:true});
+    a.deepEqual(plan.omitted,[{file:rel,reason:'UNSUPPORTED_MODE_CHANGE'}]);
+    a.equal(plan.scope,'TEXT_ONLY');a.equal(plan.hashes.length,mixed?1:0);
+    a.ok(!plan.patches.some(p=>p.files.includes(rel)));
+    a.deepEqual(gitState(repo),before);
+  });
+}

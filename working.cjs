@@ -20,9 +20,14 @@ function readDirty(repo) {
   repo=fs.realpathSync(path.resolve(repo));
   const started=performance.now();let head;
   try {head=git(repo,['rev-parse','--verify','HEAD']).trim();}catch {throw Error('A committed HEAD is required; unborn repositories are not supported.');}
-  const names=git(repo,['diff','--name-status','-z','--no-renames',head,'--'],{sourceConfig:true}).split('\0');
-  const statuses=new Map();
-  for(let i=0;i<names.length-1;i+=2)if(names[i+1])statuses.set(names[i+1],names[i]);
+  const names=git(repo,['diff','--raw','-z','--no-renames',head,'--'],{sourceConfig:true}).split('\0');
+  const statuses=new Map(),modeChanges=new Set();
+  for(let i=0;i<names.length-1;i+=2)if(names[i+1]){
+    const [oldMode,newMode,,,status]=names[i].split(' ');
+    statuses.set(names[i+1],status);
+    // A mode-only diff has no +++ header or hunks; detect it from raw metadata.
+    if(oldMode!==':000000'&&newMode!=='000000'&&oldMode.slice(1)!==newMode)modeChanges.add(names[i+1]);
+  }
   for(const rel of git(repo,['ls-files','--others','--exclude-standard','-z']).split('\0').filter(Boolean))statuses.set(rel,'?');
   const tree=new Map();
   for(const row of git(repo,['ls-tree','-rlz',head]).split('\0')){
@@ -43,6 +48,7 @@ function readDirty(repo) {
     // not an ordinary new file. Never export an Add patch against an existing blob.
     if(status==='?'&&tree.has(rel)){f.omitted='INDEX_WORKTREE_OVERLAP';continue;}
     if(status.includes('U')){f.omitted='UNMERGED_INDEX';continue;}
+    if(modeChanges.has(rel)){f.omitted='UNSUPPORTED_MODE_CHANGE';continue;}
     if(/(^|\/)(?:\.claude|\.codex)(?:\/|$)/i.test(rel)){f.omitted='PRIVATE_AGENT_STATE';continue;}
     if(!safeRelative(rel)||!noLinks(repo,abs)){f.omitted='UNSUPPORTED_PATH_OR_LINK';continue;}
     let stat;
